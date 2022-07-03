@@ -12,39 +12,39 @@ import(
 )
 
 var NewBook models.Book
-func GetBook(w http.Responsewriter, r *http.Request){
-	newbooks := models.GetAllBooks()
-	res, _:=json.Marshall(newBooks)
+func GetBook(w http.ResponseWriter, r *http.Request){
+	newBooks := models.GetAllBooks()
+	res, _:=json.Marshal(newBooks)
 	w.Header().Set("Content-Type","pkglication/json")
-	w.WriteHeader(http.statusOK)
+	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
-func GetBookById(w http.Responsewriter, r *http.Request){
+func GetBookById(w http.ResponseWriter, r *http.Request){
 	vars :=mux.Vars(r)
 	bookId := vars["bookId"]
-	ID, err:=strconv.ParsInt(bookId,0,0)
+	ID, err:=strconv.ParseInt(bookId,0,0)
 	if err != nil {
 		fmt.Println("error while parsing")
 	}
 	bookDetails, _:= models.GetBookById(ID)
 	res, _ :=json.Marshal(bookDetails)
 	w.Header().Set("Content-Type", "pkglication/json")
-	w.Writeheader(http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
-func CreateBook(w http.Responsewriter, r *http.Request){
+func CreateBook(w http.ResponseWriter, r *http.Request){
 	CreateBook := &models.Book{}
 	utils.ParseBody(r, CreateBook)
-	b := CreateBook.Createbook()
+	b := CreateBook.CreateBook()
 	res, _:=json.Marshal(b)
-	w.Writeheader(http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 	w.Write(res)
 }
 
-func DeleteBook(w http.Responsewriter, r *http.Request){
-	vars := mux.vars(r)
+func DeleteBook(w http.ResponseWriter, r *http.Request){
+	vars := mux.Vars(r)
 	bookId := vars["bookId"]
-	ID,err :=strconv.ParsInt(bookId,0 ,0)
+	ID,err :=strconv.ParseInt(bookId,0 ,0)
 	if err != nil{
 		fmt.Println("error while parsing")
 	}
@@ -55,16 +55,16 @@ func DeleteBook(w http.Responsewriter, r *http.Request){
 	w.Write(res)
 
 }
-func UpdateBook(w http.Responsewriter, r *http.Request){
-	var updtateBook = &models.Book{}
-	utils.ParseBody(r, updatebook)
+func UpdateBook(w http.ResponseWriter, r *http.Request){
+	var updateBook = &models.Book{}
+	utils.ParseBody(r, updateBook)
 	vars :=mux.Vars(r)
-	bookId : vars["bookId"] 
+	bookId := vars["bookId"] 
 	ID, err :=strconv.ParseInt(bookId,0,0)
 	if err != nil{
 		fmt.Println("error while parsing")
 	}
-	booksDetails, db:=models.GetBookById(ID)
+	bookDetails, db:=models.GetBookById(ID)
 	if updateBook.Name !=""{
 		bookDetails.Name = updateBook.Author
 	}

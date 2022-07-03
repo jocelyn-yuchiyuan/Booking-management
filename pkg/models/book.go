@@ -1,14 +1,14 @@
 package models
 
 import(
-	"github.com/jinshu/gorm"
+	"github.com/jinzhu/gorm"
 	"github.com/jocelyn-yuchiyuan/Booking-management/pkg/config"
 )
 
-var db *gorm.db
+var db *gorm.DB
 
 type Book struct{
-	gorm.model
+	gorm.Model
 	Name string `gorm:""json:"name"`
 	Author string`json:"author"`
 	Publication string`json:"publication"`
@@ -16,27 +16,28 @@ type Book struct{
 
 func init(){
 	config.Connect()
-	db = cofig.GetDB()
+	db = config.GetDB()
 	db.AutoMigrate(&Book{})
 }
-func(b *Book)CreateBook()*Book{
+func(b *Book)CreateBook() *Book{
 	db.NewRecord(b)
 	db.Create(&b)
 	return b
 }
-func GetAllBooks()[]Book{
-	var Books []Bookdb.Find(&Books)
+func GetAllBooks() []Book{
+	var Books []Book
+	db.Find(&Books)
 	return Books
 }
-func GetBookById(Id int64)(*book, *gorm.DB){
+func GetBookById(Id int64)(*Book, *gorm.DB){
 	var getBook Book
-	db :=db.where("ID = ?", Id).Find(&getBook)
-	return &getBook.db
+	db:=db.Where("ID=?", Id).Find(&getBook)
+	return &getBook, db
 }
 
-func DeleteBook(ID int64){
+func DeleteBook(ID int64) Book{
 	var book Book
-	db.where("ID= ?", ID).Delete(book)
+	db.Where("ID= ?", ID).Delete(book)
 	return book
 }
 
